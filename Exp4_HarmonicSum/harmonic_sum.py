@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# ------------------------ 原代码中的函数（保持不变） ------------------------
 def sum_up(N):
     """从小到大计算调和级数和：H_N = 1 + 1/2 + ... + 1/N"""
     result = 0.0
