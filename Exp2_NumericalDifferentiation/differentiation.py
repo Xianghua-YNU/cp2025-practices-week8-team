@@ -10,8 +10,9 @@ def f(x):
     返回:
         float: 函数计算结果
     """
+    return x*(x-1)
     # 学生在此实现函数计算
-    pass
+    
 
 def forward_diff(f, x, delta):
     """前向差分法计算导数
@@ -24,9 +25,11 @@ def forward_diff(f, x, delta):
     返回:
         float: 导数的近似值
     """
+   
+    return (f(x + delta) - f(x)) / delta
     # 学生在此实现前向差分公式
     # 提示: 使用 (f(x + delta) - f(x)) / delta
-    pass
+    
 
 def central_diff(f, x, delta):
     """中心差分法计算导数
@@ -39,9 +42,10 @@ def central_diff(f, x, delta):
     返回:
         float: 导数的近似值
     """
+    return (f(x + delta) - f(x - delta)) / (2 * delta)
     # 学生在此实现中心差分公式
     # 提示: 使用 (f(x + delta) - f(x - delta)) / (2 * delta)
-    pass
+   
 
 def analytical_derivative(x):
     """解析导数 f'(x) = 2x - 1
@@ -53,7 +57,9 @@ def analytical_derivative(x):
         float: 导数的精确值
     """
     # 学生在此实现解析导数公式
-    pass
+    return 2*x-1
+    
+
 
 def calculate_errors(x_point=1.0):
     """计算不同步长下的误差
@@ -72,8 +78,23 @@ def calculate_errors(x_point=1.0):
     # 1. 使用np.logspace生成步长序列
     # 2. 对每个步长计算前向和中心差分
     # 3. 计算相对误差 = |近似值 - 精确值| / |精确值|
-    pass
-
+    TrueValue = analytical_derivative(x_point)
+    
+    deltas = np.logspace(-14,-2,13)
+    #解析解
+    analytical_derivative(x_point)
+    #存储列表
+    forwarderrors = []
+    centralerrors = []
+    
+    for delta in deltas:
+        forward_error = abs((forward_diff(f, x_point, delta) - TrueValue)/TrueValue)
+        forwarderrors.append(forward_error)
+        
+        central_error = abs((central_diff(f, x_point, delta) - TrueValue)/TrueValue)
+        centralerrors.append(central_error)
+        
+    return deltas,forwarderrors,centralerrors
 def plot_errors(deltas, forward_errors, central_errors):
     """绘制误差-步长关系图
     
@@ -87,8 +108,20 @@ def plot_errors(deltas, forward_errors, central_errors):
     # 1. 使用plt.loglog绘制双对数坐标图
     # 2. 添加参考线表示理论收敛阶数
     # 3. 添加图例、标题和坐标轴标签
-    pass
-
+    plt.figure(figsize = (10,8))
+    #向前差分误差
+    plt.loglog(deltas, forward_errors, 'o-', label='forward')
+    plt.loglog(deltas, central_errors, 's-', label='central')
+    #参考线
+    plt.loglog(deltas, deltas, '--', label='First Order O(h)')
+    plt.loglog(deltas, np.array(deltas)**2, '--', label='Second Order O($h^2$)')
+    
+    plt.xlabel('Step')
+    plt.xlabel('Error')
+    plt.grid(True)
+    plt.title('error_vs_stepsize')
+    plt.legend()
+    plt.show()
 def print_results(deltas, forward_errors, central_errors):
     """打印计算结果表格
     
@@ -99,8 +132,8 @@ def print_results(deltas, forward_errors, central_errors):
     """
     # 学生在此实现结果打印
     # 提示: 格式化输出步长和对应误差
-    pass
-
+    for i in range(len(deltas)):
+        print(f"{deltas[i]:.2e}\t{forward_errors[i]:.6e}\t{central_errors[i]:.6e}")
 def main():
     """主函数"""
     # 学生可以修改测试点
