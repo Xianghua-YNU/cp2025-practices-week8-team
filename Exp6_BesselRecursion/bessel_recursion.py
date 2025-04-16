@@ -1,5 +1,5 @@
 import numpy as np
-import mathplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from scipy.special import spherical_jn
 
 
